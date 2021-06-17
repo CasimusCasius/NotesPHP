@@ -1,14 +1,10 @@
 <?php 
-declare (strict_types=1);
+declare (strict_types=1); 
+namespace Notes;
 
-$test =  ['test', 'test1', 'test2'];
 
-function debug($data): void
-{
-echo '<div style="display: inline-block; padding: 0 5px; border: 2px solid grey; background: lightgray">
-    <pre>';
-        print_r($data);
-echo "</pre></div>";
-}
+require_once("src/utils/debug.php"); // jest wymagane tylko raz
+// include_once("src/utils/debug.php") //nie jest wymagany, załącz tylko raz
 
+$test = ['test','test1','test2'];
 debug($test);
