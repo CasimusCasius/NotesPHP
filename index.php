@@ -2,18 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Notes;
+namespace App;
 
-require_once("src/utils/debug.php"); // jest wymagane tylko raz
-// include_once("src/utils/debug.php") //nie jest wymagany, załącz tylko raz
+require_once("src/Utils/debug.php");
 require_once("src/View.php");
 
-const DEAFULT_ACTION = 'list';
+const DEFAULT_ACTION = 'list';
 
-
-$action = htmlentities($_GET['action'] ?? DEAFULT_ACTION);
+$action = $_GET['action'] ?? DEFAULT_ACTION;
 
 $view = new View();
-$view->render($action);
 
+$viewParams = [];
+if ($action === 'create') {
+  $page = 'create';
+  $viewParams['resultCrate'] = "udało się";
+} else {
+  $page = 'list';
+  $viewParams['resultList'] = "wyświetlamy notatki";
+}
 
+$view->render($page, $viewParams);
