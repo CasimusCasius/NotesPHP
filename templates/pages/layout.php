@@ -12,7 +12,7 @@
             <div class="menu">
                 <ul>
                     <li><a href="/">Lista notatek</a></li>
-                    <li><a href="/?action=createNote">Moja Notatka</a></li>
+                    <li><a href="/?action=create">Moja Notatka</a></li>
                 </ul>
             </div>
             <div>

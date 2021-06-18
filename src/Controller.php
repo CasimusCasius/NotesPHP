@@ -6,21 +6,32 @@ namespace App;
 require_once("src/View.php");
 class Controller
 {
-    public function run(string $action): void
+    private const DEFAULT_ACTION = 'list';
+
+    private array $request;
+    private View $view;
+   
+    public function __construct(array $request)
+    {
+        $this->request = $request;
+        $this->view = new View();
+    }
+
+    public function run(): void
     {
         $viewParams = []; 
-        $view = new View();
-        
-        switch ($action)
+        switch ($this->action())
         {
             case 'create':
                 $page = 'create';
                 $created = false;
-                if (!empty($_POST))
+
+                $data = $this->getRequestPost();
+                if (!empty($data))
                 {
                     $viewParams = [
-                        'title' => $_POST['title'],
-                        'description' => $_POST['description']
+                        'title' => $data['title'],
+                        'description' =>$data['description']
                     ];
                     $created = true;
                 }
@@ -37,7 +48,24 @@ class Controller
                 $viewParams['resultList'] = "wyświetlamy notatki";
                 break;
         }
-        $view->render($page, $viewParams); 
+        $this->view->render($page, $viewParams); 
+    }
+
+    private function getRequestPost() :array
+    {
+        return $this->request['post'] ?? [];
     }
     
+    private function getRequestGet() :array
+    {
+        return $this->request['get']??[];
+    }
+    
+        private function action() :string
+    {
+        $data = $this->getRequestGet();
+        return $data['action'] ?? self::DEFAULT_ACTION;
+    }
+
+
 }

@@ -7,10 +7,8 @@ namespace App;
 require_once("src/Utils/debug.php");
 require_once("src/Controller.php");
 
-const DEFAULT_ACTION = 'list';
-
-$action = htmlentities($_GET['action'] ?? DEFAULT_ACTION);
-
-$controller = new Controller();
-
-$controller->run($action);
+$request = [
+'get' =>  $_GET,
+'post' => $_POST
+];
+(new Controller($request))->run();
