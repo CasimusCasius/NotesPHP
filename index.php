@@ -33,7 +33,7 @@ catch (StorageException $e)
 catch (ConfigException $e)
 {
     echo "<h1>Wystąpił błąd Aplikacji</h1>";
-    echo "<h3>".$e->getMessage()."</h3>";
+    echo "Problem z Konfiguracją. Skontaktuj się z Administratorem";
 }
 
 catch (AppException $e)
