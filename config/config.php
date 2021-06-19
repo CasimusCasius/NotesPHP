@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'db' => [
+    'dba' => [
         'host' => 'localhost',
         'database' => 'notes',
         'user' => 'user_notes',
