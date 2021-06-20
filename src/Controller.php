@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Exception\ConfigException;
+use App\Exception\NotFoundException;
 
 require_once("View.php");
 require_once("Database.php");
@@ -39,7 +40,6 @@ class Controller
 
     public function run(): void
     {
-        $viewParams = [];
         switch ($this->action())
         {
             case 'create':
@@ -59,19 +59,41 @@ class Controller
                 }
                 break;
             case 'show':
-                $viewParams = [
-                    'title' => 'Moja notatka',
-                    'description' => 'Opis'
-                ];
+                $page = 'show';
+                $data = $this->getRequestGet();
+                $noteId=(int) ($data['id'] ?? null);
+
+                if(!$noteId)
+                {
+                    header('Location: /?error=missingNoteId');
+                    exit;
+                }
+                try
+                {
+                $note = $this->database->getNote($noteId);
+                }
+                catch (NotFoundException $e)
+                {
+                    header('Location: /?error=noteNotFound');
+                    exit;
+                }
+                $viewParams= ['note'=> $note];
                 break;
             default:
                 $page = 'list';
                 $data = $this->getRequestGet();
-                $viewParams['before'] = $data['before'] ?? null;
+
+                $notes=$this->database->getNotes();
+
+                $viewParams = [
+                    'notes' => $this->database->getNotes(),
+                    'before' => $data['before'] ?? null,
+                    'error' => $data['error'] ?? null
+                ];
                 
                 break;
         }
-        $this->view->render($page, $viewParams);
+        $this->view->render($page, $viewParams ?? []);
     }
 
     private function getRequestPost(): array
