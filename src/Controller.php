@@ -17,7 +17,7 @@ class Controller
     private static array $configuration = [];
 
     private Database $database;
-    private array $request;
+    private Request $request;
     private View $view;
 
     public static function initConfiguration(array $configuration): void
@@ -25,7 +25,7 @@ class Controller
         self::$configuration = $configuration;
     }
 
-    public function __construct(array $request)
+    public function __construct(Request $request)
     {
         if (empty(self::$configuration['db']))
         {
@@ -45,13 +45,12 @@ class Controller
             case 'create':
                 $page = 'create';
                 
-                $note = $this->getRequestPost();
-                if (!empty($note))
+                if ($this->request->hasPost())
                 {
                     $this->database->createNote(
                         [
-                            'title' => $note['title'],
-                            'description' => $note['description']
+                            'title' => $this->request->postParam('title'),
+                            'description' => $this->request->postParam('description')
                         ]
                     );
 
@@ -60,8 +59,7 @@ class Controller
                 break;
             case 'show':
                 $page = 'show';
-                $data = $this->getRequestGet();
-                $noteId=(int) ($data['id'] ?? null);
+                $noteId=(int) ($this->request->getParam('id'));
 
                 if(!$noteId)
                 {
@@ -81,34 +79,18 @@ class Controller
                 break;
             default:
                 $page = 'list';
-                $data = $this->getRequestGet();
-
                 $notes=$this->database->getNotes();
-
                 $viewParams = [
                     'notes' => $this->database->getNotes(),
-                    'before' => $data['before'] ?? null,
-                    'error' => $data['error'] ?? null
+                    'before' => $this->request->getParam('before'),
+                    'error' => $this->request->getParam('error')
                 ];
-                
                 break;
         }
         $this->view->render($page, $viewParams ?? []);
     }
-
-    private function getRequestPost(): array
-    {
-        return $this->request['post'] ?? [];
-    }
-
-    private function getRequestGet(): array
-    {
-        return $this->request['get'] ?? [];
-    }
-
     private function action(): string
     {
-        $data = $this->getRequestGet();
-        return $data['action'] ?? self::DEFAULT_ACTION;
+        return  $this->request->getParam('action',self::DEFAULT_ACTION);
     }
 }
