@@ -2,10 +2,10 @@
     <?php $note = $params['note'] ?? null; ?>
     <?php if (!empty($note)) : ?>
     <ul>
-        <li>ID: <?php echo (int) $note['id'] ?></li>
-        <li>Tytuł: <?php echo htmlentities($note['title']) ?></li>
-        <li>Treść: <?php echo htmlentities($note['description']) ?></li>
-        <li>Zapisano: <?php echo htmlentities($note['created']) ?></li>
+        <li>ID: <?php echo $note['id'] ?></li>
+        <li>Tytuł: <?php echo $note['title'] ?></li>
+        <li>Treść: <?php echo $note['description'] ?></li>
+        <li>Zapisano: <?php echo $note['created'] ?></li>
     </ul>
     
     <?php else: ?>
