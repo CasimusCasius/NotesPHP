@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 require_once("src/Utils/debug.php");
-require_once("src/Controller.php");
+require_once("src/NoteController.php");
 require_once("src/Request.php");
 
 use App\Exception\AppException;
@@ -20,8 +20,8 @@ $request = new Request($_GET,$_POST);
 
 try 
 {     
-    Controller::initConfiguration($configuration);
-    (new Controller($request))->run();
+    AbstractController::initConfiguration($configuration);
+    (new NoteController($request))->run();
 }
 catch (StorageException $e)
 {
