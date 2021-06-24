@@ -10,7 +10,7 @@ use app\Controller\AbstractController;
 
 class NoteController extends AbstractController
 {
-    public function createAction()
+    public function createAction(): void
     {
         if ($this->request->hasPost())
         {
@@ -20,18 +20,17 @@ class NoteController extends AbstractController
                     'description' => $this->request->postParam('description')
                 ]
             );
-            header('Location: /?before=created'); //do strony głównej
+            $this->redirect('/',['before'=>'created']); //do strony głównej
         }
         $this->view->render('create');
     }
-    public function showAction() 
+    public function showAction() :void
     {
         $noteId=(int) ($this->request->getParam('id'));
 
         if(!$noteId)
         {
-            header('Location: /?error=missingNoteId');
-            exit;
+            $this->redirect('/',['error'=>'missingNoteId']);
         }
         try
         {
@@ -39,13 +38,12 @@ class NoteController extends AbstractController
         }
         catch (NotFoundException $e)
         {
-            header('Location: /?error=noteNotFound');
-            exit;
+            $this->redirect('/',['error'=>'noteNotFound']);
         }
         $this->view->render('show',['note'=> $note]);
     }
 
-    public function listAction()
+    public function listAction() :void
     {
             $notes=$this->database->getNotes();
             $viewParams = [
@@ -55,4 +53,16 @@ class NoteController extends AbstractController
             ];
         $this->view->render('list',$viewParams);
     }
+
+    public function editAction() :void
+    {
+        $noteId =(int) $this->request->getParam('id');
+        if(!$noteId)
+        {
+            $this->redirect('/',['error'=>'missingNoteId']);
+        }
+        $this->view->render('edit');
+    }
+
+    
 }
