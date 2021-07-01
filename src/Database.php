@@ -91,7 +91,7 @@ class Database
 
             $query = "INSERT INTO notes (title,description,created) VALUES ({$title},{$description},{$created})";
             
-            $this->conn->exec($query);
+            
         }
         catch(Throwable $e)
         {
@@ -100,5 +100,25 @@ class Database
             exit ('STOP');
         }
        
+    }
+
+    public function editNote(int $id, array $data): void
+    {
+
+        
+        try
+        {
+            $title = $this->conn->quote($data['title']);
+            $description  = $this->conn->quote($data['description']);
+            $query = "UPDATE notes SET title = $title, description = $description Where id=$id";
+            $this->conn->exec($query);
+
+        }
+        catch(Throwable $e)
+        {
+            throw new StorageException('Nie udalo sie edytować notatki',400,$e);
+            
+            exit ('STOP');
+        }
     }
 }

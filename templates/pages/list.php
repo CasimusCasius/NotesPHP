@@ -8,6 +8,9 @@
                     case 'created':
                         echo 'Notatka została utworzona !';
                         break;
+                    case 'edited':
+                        echo 'Zmiany w notatce zostały zapisane !';
+                        break;
                 }
             } ?>
         </div>
