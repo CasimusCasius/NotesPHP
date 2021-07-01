@@ -121,4 +121,19 @@ class Database
             exit ('STOP');
         }
     }
+
+    public function deleteNote(int $id): void
+    {
+       try
+        {
+            $query = "DELETE FROM notes WHERE id=$id";
+            $this->conn->exec($query);
+        }
+        catch(Throwable $e)
+        {
+            throw new StorageException('Nie udalo sie usunąć notatki',400,$e);
+            
+            exit ('STOP');
+        }
+    }
 }
